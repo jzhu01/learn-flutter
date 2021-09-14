@@ -1,4 +1,0 @@
-#Mon Sep 13 19:06:45 EDT 2021
-base.0=/Users/jzhu/Documents/code/learn-flutter/first_app/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
-renamed.0=classes.dex
-path.0=classes.dex
