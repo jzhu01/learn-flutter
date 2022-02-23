@@ -41,8 +41,36 @@ class _NewTransactionState extends State<NewTransaction> {
     Navigator.of(context).pop();
   }
 
+  void _showCupertinoDialog(Widget child) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => Container(
+          height: 216,
+          padding: const EdgeInsets.only(top: 6.0),
+          // The Bottom margin is provided to align the popup above the system navigation bar.
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          // Provide a background color for the popup.
+          color: CupertinoColors.systemBackground.resolveFrom(context),
+          // Use a SafeArea widget to avoid system overlaps.
+          child: SafeArea(
+            top: false,
+            child: child,
+          ),
+        ));
+  }
+
   void _presentDatePicker() {
-    showDatePicker(
+    Platform.isIOS ?
+    _showCupertinoDialog(
+        CupertinoDatePicker(
+        initialDateTime: DateTime.now(),
+        mode: CupertinoDatePickerMode.date,
+        use24hFormat: true,
+        onDateTimeChanged: (DateTime newDate) {
+          setState(() => _selectedDate = newDate);
+    })) : showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2019),
@@ -104,7 +132,9 @@ class _NewTransactionState extends State<NewTransaction> {
                   ],
                 ),
               ),
-              RaisedButton(
+              Platform.isIOS ? CupertinoButton.filled(
+                onPressed: _submitData, child: Text('Add Transaction'),
+              ): RaisedButton(
                 child: Text('Add Transaction'),
                 color: Theme.of(context).primaryColor,
                 textColor: Theme.of(context).textTheme.button.color,

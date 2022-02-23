@@ -109,6 +109,33 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Widget _buildAppBar() {
+    return Platform.isIOS
+        ? CupertinoNavigationBar(
+        middle: Text('Personal Expenses'),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            GestureDetector(
+              child: Icon(CupertinoIcons.add),
+              onTap: () => _startAddNewTransaction(context),
+            ),
+          ],
+        ))
+        : AppBar(
+      title: Text(
+        'Personal Expenses',
+        style: TextStyle(fontFamily: 'Open Sans'),
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _startAddNewTransaction(context),
+        ),
+      ],
+    );
+  }
+
   List<Widget> _buildLandscapeContent(
       MediaQueryData mediaQuery, PreferredSizeWidget appBar, Widget txListWidget) {
     return [
@@ -162,30 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
-    final PreferredSizeWidget appBar = Platform.isIOS
-        ? CupertinoNavigationBar(
-            middle: Text('Personal Expenses'),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                GestureDetector(
-                  child: Icon(CupertinoIcons.add),
-                  onTap: () => _startAddNewTransaction(context),
-                ),
-              ],
-            ))
-        : AppBar(
-            title: Text(
-              'Personal Expenses',
-              style: TextStyle(fontFamily: 'Open Sans'),
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => _startAddNewTransaction(context),
-              ),
-            ],
-          );
+    final PreferredSizeWidget appBar = _buildAppBar();
     final txListWidget = Container(
       height: (mediaQuery.size.height -
               appBar.preferredSize.height -
